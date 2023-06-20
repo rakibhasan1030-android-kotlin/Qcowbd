@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Qcowbd</string>
+    <string name="shop">Shop</string>
+    <string name="home">Home</string>
+    <string name="service">Service</string>
+    <string name="custom_order">Custom Order</string>
+    <string name="login">Login</string>
+    <string name="registration">Registration</string>
+</resources>
