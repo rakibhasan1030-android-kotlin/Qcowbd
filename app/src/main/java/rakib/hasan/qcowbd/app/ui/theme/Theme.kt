@@ -1,4 +1,4 @@
-package rakib.hasan.qcowbd.ui.theme
+package rakib.hasan.qcowbd.app.ui.theme
 
 import android.app.Activity
 import android.os.Build

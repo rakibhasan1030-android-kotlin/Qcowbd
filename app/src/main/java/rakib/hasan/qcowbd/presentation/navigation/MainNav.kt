@@ -5,7 +5,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import rakib.hasan.qcowbd.presentation.Screen
+import rakib.hasan.qcowbd.presentation.NavRoutes
+import rakib.hasan.qcowbd.presentation.custom_order.CustomOrderScreen
 import rakib.hasan.qcowbd.presentation.home.HomeScreen
 import rakib.hasan.qcowbd.presentation.login.LoginScreen
 import rakib.hasan.qcowbd.presentation.registration.RegistrationScreen
@@ -14,21 +15,33 @@ import rakib.hasan.qcowbd.presentation.shop.ShopScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.mainGraph(drawerState: DrawerState) {
-    navigation(startDestination = Screen.HomeScreen.route, route = Screen.HomeScreen.route) {
-        /*composable(route = Screen.HomeScreen.route){
+    navigation(startDestination = MainNavOption.HomeScreen.name, route = NavRoutes.MainRoute.name) {
+        composable(route = MainNavOption.HomeScreen.name){
             HomeScreen(drawerState)
         }
-        composable(route = Screen.ShopScreen.route){
+        composable(route = MainNavOption.ShopScreen.name){
             ShopScreen(drawerState)
         }
-        composable(route = Screen.ServiceScreen.route){
+        composable(route = MainNavOption.ServiceScreen.name){
             ServiceScreen(drawerState)
         }
-        composable(route = Screen.LoginScreen.route){
+        composable(route = MainNavOption.CustomOrderScreen.name){
+            CustomOrderScreen(drawerState)
+        }
+        composable(route = MainNavOption.LoginScreen.name){
             LoginScreen(drawerState)
         }
-        composable(route = Screen.RegistrationScreen.route){
+        composable(route = MainNavOption.RegistrationScreen.name){
             RegistrationScreen(drawerState)
-        }*/
+        }
     }
+}
+
+enum class MainNavOption {
+    HomeScreen,
+    ShopScreen,
+    ServiceScreen,
+    CustomOrderScreen,
+    LoginScreen,
+    RegistrationScreen,
 }
