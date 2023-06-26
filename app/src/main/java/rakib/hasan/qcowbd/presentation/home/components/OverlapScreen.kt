@@ -20,9 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import rakib.hasan.qcowbd.app.ui.theme.DividerColor
 import rakib.hasan.qcowbd.app.ui.theme.QcowbdTheme
-import rakib.hasan.qcowbd.app.ui.theme.Red100
 import kotlin.random.Random
 
 
@@ -103,7 +101,7 @@ fun BoxesPreview() {
                                             .weight(1f)
                                             .background(Color(Random.nextInt()))
                                     )
-                                    if(i != 3)Divider(
+                                    if (i != 3) Divider(
                                         modifier = Modifier
                                             .padding(vertical = 8.dp, horizontal = 8.dp)
                                             .background(Color(0xFFd1d3e0))
