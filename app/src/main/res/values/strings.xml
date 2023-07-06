@@ -21,4 +21,9 @@
     <string name="drawer_custom_order_description">Custom order navigation button</string>
     <string name="drawer_login_description">Login navigation button</string>
     <string name="drawer_registration_description">Login Registration button</string>
+
+
+    <string name="book_now">Book Now</string>
+    <string name="book_now_card_text">পছন্দের গরু কিনতে\nএখনি বুকিং দিয়ে রাখুন</string>
+
 </resources>
