@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import rakib.hasan.qcowbd.presentation.DrawerParams
+import rakib.hasan.qcowbd.presentation.main.DrawerParams
 import rakib.hasan.qcowbd.presentation.navigation.MainNavOption
 import rakib.hasan.qcowbd.app.ui.theme.QcowbdTheme
 

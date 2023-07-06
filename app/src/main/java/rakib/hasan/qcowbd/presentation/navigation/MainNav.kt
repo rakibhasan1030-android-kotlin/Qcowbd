@@ -5,7 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import rakib.hasan.qcowbd.presentation.NavRoutes
+import rakib.hasan.qcowbd.presentation.main.NavRoutes
 import rakib.hasan.qcowbd.presentation.custom_order.CustomOrderScreen
 import rakib.hasan.qcowbd.presentation.home.HomeScreen
 import rakib.hasan.qcowbd.presentation.login.LoginScreen
