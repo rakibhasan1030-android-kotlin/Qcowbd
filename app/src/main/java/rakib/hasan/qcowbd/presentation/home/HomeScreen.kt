@@ -1,5 +1,6 @@
 package rakib.hasan.qcowbd.presentation.home
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,8 +9,10 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +22,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -33,17 +39,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rakib.hasan.qcowbd.R
@@ -63,49 +76,55 @@ fun HomeScreen(
         val scrollState = rememberScrollState()
 
         val context = LocalContext.current
-        val state = viewModel.state.value
+        val state = viewModel.productState.value
+        val categoryState = viewModel.categoryState.value
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
                 .scrollable(state = scrollState, orientation = Orientation.Vertical)
         ) {
-            LazyColumn(
-                modifier = Modifier
-            ) {
-                item {
-                    Boxes(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(250.dp)
-                                .background(Color.Black)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .fillMaxWidth()
-                                .height(100.dp)
-                                .background(Color.Transparent)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                content = {
+                    item (span = { GridItemSpan(2) }) {
+                        Boxes(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            FeatureCard()
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(250.dp)
+                                    .background(Color.Black)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .padding(horizontal = 24.dp)
+                                    .fillMaxWidth()
+                                    .height(100.dp)
+                                    .background(Color.Transparent)
+                            ) {
+                                FeatureCard()
+                            }
                         }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    BookNowCard()
-                    Spacer(modifier = Modifier.height(16.dp))
+                    item (span = { GridItemSpan(2) }) {
+                        BookNowCard()
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    item (span = { GridItemSpan(2) }) {
+                        ProductHeader()
+                    }
+                    items(state.products) { product ->
+                        HomeProductItem(product = product, onItemClick = {
+                            Toast.makeText(context, product.title, Toast.LENGTH_SHORT).show()
+                        })
+                    }
                 }
+            )
 
-
-                items(state.products) { product ->
-                    HomeProductItem(product = product, onItemClick = {
-                        Toast.makeText(context, product.title, Toast.LENGTH_SHORT).show()
-                    })
-                }
-            }
             if (state.error.isNotBlank()) {
                 Text(
                     text = state.error,
@@ -133,7 +152,7 @@ fun HomeScreen(
 fun FeatureCard() {
     Card(
         modifier = Modifier
-            .wrapContentHeight(Alignment.CenterVertically),
+            .wrapContentHeight(CenterVertically),
         elevation = CardDefaults.cardElevation(
             0.5.dp
         )
@@ -187,74 +206,133 @@ fun FeatureCard() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookNowCard() {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(IntrinsicSize.Min)
             .padding(16.dp)
-            .background(
-                brush = Brush.verticalGradient(
-                    listOf(
-                        colorResource(id = R.color.green_book_now),
-                        Color.Transparent
-                    )
-                ),
-                shape = RoundedCornerShape(20.dp)
-            )
-            /*.background(
-                color = colorResource(id = R.color.teal_200),
-                shape = RoundedCornerShape(20.dp)
-            )*/
-            .padding(24.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_cow),
-                contentDescription = "Cow Icon",
+        Box {
+            Box(
                 modifier = Modifier
-                    .height(60.dp)
-                    .width(60.dp)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(id = R.string.book_now_card_text),
-                )
-
-            Card(
-                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
                     .background(
-                        color = colorResource(id = R.color.teal_200),
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                colorResource(id = R.color.green_book_now),
+                                Color.Transparent
+                            )
+                        ),
                     )
-                    .wrapContentHeight(Alignment.CenterVertically)
-                    .wrapContentWidth(Alignment.CenterHorizontally),
-                elevation = CardDefaults.cardElevation(
-                    0.5.dp
-                )
+            )
+            Image(
+                painter = painterResource(id = R.drawable.image_book_now),
+                contentDescription = "null",
+                modifier = Modifier.matchParentSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.5F
+            )
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
-                Text(
-                    text = stringResource(id = R.string.book_now),
+                Row(
                     modifier = Modifier
-                        .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-                )
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_cow),
+                        contentDescription = "Cow Icon",
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(60.dp)
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min)
+                        .weight(1f),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.book_now_card_text),
+                        color = colorResource(id = R.color.deep_green_book_now),
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        style = TextStyle(
+                            lineHeight = 1.3.em,
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false,
+                            ),
+                        ),
+                        modifier = Modifier.wrapContentWidth(Alignment.Start)
+                    )
+                    Card(
+                        onClick = {
+
+                        },
+                        colors = CardDefaults.cardColors(
+                            containerColor = colorResource(id = R.color.green_book_now),
+                        ),
+                        elevation = CardDefaults.cardElevation(
+                            0.5.dp
+                        ),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.book_now),
+                            modifier = Modifier
+                                .padding(
+                                    start = 16.dp,
+                                    top = 6.dp,
+                                    end = 16.dp,
+                                    bottom = 6.dp
+                                ),
+                            textDecoration = TextDecoration.None,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                        )
+                    }
+                }
             }
         }
     }
 }
+
+@Composable
+fun ProductHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .width(IntrinsicSize.Min)
+            .padding(start = 16.dp, end = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Shop",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(
+            text = "View All",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontStyle = FontStyle.Italic
+        )
+    }
+}
+
+
+
 
 
 

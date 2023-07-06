@@ -10,4 +10,5 @@
 
     <color name="divider_color">#d1d3e0</color>
     <color name="green_book_now">#1CAE81</color>
+    <color name="deep_green_book_now">#275143</color>
 </resources>

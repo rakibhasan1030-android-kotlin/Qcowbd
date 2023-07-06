@@ -16,9 +16,7 @@ data class Data(
     @SerializedName("is_booked") val isBooked: String = ""
 )
 
-fun Data.toHomeProduct(): HomeProduct {
-    return HomeProduct(
-        title = title,
-        image = image
-    )
-}
+fun Data.toHomeProduct(): HomeProduct = HomeProduct(
+    title = title,
+    image = image
+)
