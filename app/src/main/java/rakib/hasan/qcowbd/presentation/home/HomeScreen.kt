@@ -12,22 +12,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,7 +42,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -59,9 +62,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import rakib.hasan.qcowbd.R
 import rakib.hasan.qcowbd.app.components.appbar.AppBar
+import rakib.hasan.qcowbd.common.Constants
 import rakib.hasan.qcowbd.presentation.home.components.Boxes
+import rakib.hasan.qcowbd.presentation.home.components.CategoryItem
 import rakib.hasan.qcowbd.presentation.home.components.HomeProductItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,21 +80,20 @@ fun HomeScreen(
         topBar = { AppBar(drawerState = drawerState) }
     ) {
         val scrollState = rememberScrollState()
-
         val context = LocalContext.current
-        val state = viewModel.productState.value
+        val productState = viewModel.productState.value
         val categoryState = viewModel.categoryState.value
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
                 .scrollable(state = scrollState, orientation = Orientation.Vertical)
         ) {
+            val spanCount = 2
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Fixed(spanCount),
                 content = {
-                    item (span = { GridItemSpan(2) }) {
+                    item(span = { GridItemSpan(spanCount) }) {
                         Boxes(
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -110,24 +115,38 @@ fun HomeScreen(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
-                    item (span = { GridItemSpan(2) }) {
+                    item(span = { GridItemSpan(spanCount) }) {
+                        LazyRow(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                        ) {
+                            itemsIndexed(categoryState.categories) { index, category ->
+                                CategoryItem(category = category, onItemClick = {
+                                    Toast.makeText(context, category.title, Toast.LENGTH_SHORT).show()
+                                })
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    item(span = { GridItemSpan(spanCount) }) {
                         BookNowCard()
                         Spacer(modifier = Modifier.height(16.dp))
                     }
-                    item (span = { GridItemSpan(2) }) {
+                    item(span = { GridItemSpan(spanCount) }) {
                         ProductHeader()
                     }
-                    items(state.products) { product ->
+                    items(productState.products) { product ->
                         HomeProductItem(product = product, onItemClick = {
                             Toast.makeText(context, product.title, Toast.LENGTH_SHORT).show()
                         })
                     }
                 }
             )
-
-            if (state.error.isNotBlank()) {
+            if (productState.error.isNotBlank()) {
                 Text(
-                    text = state.error,
+                    text = productState.error,
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -136,7 +155,7 @@ fun HomeScreen(
                         .align(Alignment.Center)
                 )
             }
-            if (state.isLoading) {
+            if (productState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .align(
