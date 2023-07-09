@@ -3,12 +3,19 @@ package rakib.hasan.qcowbd.presentation.home.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +38,7 @@ fun CategoryItem(
     category: Category,
     onItemClick: (Category) -> Unit,
 ) {
-    Column(
+    /*Column(
         modifier = Modifier
             .width(80.dp)
             .height(80.dp)
@@ -60,6 +67,49 @@ fun CategoryItem(
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
         )
+    }*/
+
+    Box(
+        modifier = Modifier
+            .width(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .width(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min),
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(80.dp)
+                    .clip(shape = CircleShape)
+                    .background(color = Color.Gray.copy(0.5F)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(Constants.CATEGORIES_PATH + category.image),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                )
+            }
+            Text(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                text = category.title,
+                color = Color.Black,
+                fontStyle = FontStyle.Normal,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 
 }

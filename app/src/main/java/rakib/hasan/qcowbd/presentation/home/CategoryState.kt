@@ -1,4 +1,4 @@
-package rakib.hasan.qcowbd.presentation.home.components
+package rakib.hasan.qcowbd.presentation.home
 
 import rakib.hasan.qcowbd.domain.model.Category
 

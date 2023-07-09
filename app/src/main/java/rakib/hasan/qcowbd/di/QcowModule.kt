@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import rakib.hasan.qcowbd.common.Constants
 import rakib.hasan.qcowbd.data.remote.QcowApi
-import rakib.hasan.qcowbd.data.repository.QcowRepositoryImpl
+import rakib.hasan.qcowbd.domain.repository.repository.QcowRepositoryImpl
 import rakib.hasan.qcowbd.domain.repository.QcowRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -83,6 +83,10 @@ fun HomeScreen(
         val context = LocalContext.current
         val productState = viewModel.productState.value
         val categoryState = viewModel.categoryState.value
+        val featureServiceState = viewModel.featureServiceState.value
+
+        Log.e("Services", "${featureServiceState.categories}")
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
